@@ -1,0 +1,66 @@
+DROP TABLE elevi CASCADE CONSTRAINTS;
+CREATE TABLE elevi
+	(
+	matricola		NUMBER(6) PRIMARY KEY,
+	nume			VARCHAR2(50),
+	an				NUMBER(2)
+	);
+
+DROP TABLE profesori CASCADE CONSTRAINTS;
+CREATE TABLE profesori
+	(
+	cod		NUMBER(2) PRIMARY KEY,
+	nume	VARCHAR2(50)
+	);
+
+DROP TABLE note_elevi CASCADE CONSTRAINTS;
+CREATE TABLE note_elevi
+	(
+	mat		NUMBER(6) REFERENCES elevi( matricola ),
+	cod		NUMBER(2) REFERENCES profesori( cod ),
+	nota	NUMBER(5,2)									-- nota pe care elevul cu matricola mat a luat-o
+														-- la prof.cu codul cod
+	);
+
+INSERT INTO elevi VALUES (100001,'nume1',1);
+INSERT INTO elevi VALUES (100002,'nume2',1);
+INSERT INTO elevi VALUES (100003,'nume3',1);
+INSERT INTO elevi VALUES (100004,'nume4',1);
+INSERT INTO elevi VALUES (100005,'nume5',1);
+INSERT INTO elevi VALUES (100006,'nume6',2);
+INSERT INTO elevi VALUES (100007,'nume7',2);
+INSERT INTO elevi VALUES (100008,'nume8',2);
+INSERT INTO elevi VALUES (100009,'nume9',2);
+INSERT INTO elevi VALUES (100010,'nume10',3);
+INSERT INTO elevi VALUES (100011,'nume11',3);
+INSERT INTO elevi VALUES (100012,'nume12',3);
+INSERT INTO elevi VALUES (100013,'nume13',3);
+INSERT INTO elevi VALUES (100014,'nume14',4);
+INSERT INTO elevi VALUES (100015,'nume15',4);
+INSERT INTO elevi VALUES (100016,'nume16',4);
+INSERT INTO elevi VALUES (100017,'nume17',4);
+INSERT INTO elevi VALUES (100018,'nume18',4);
+
+INSERT INTO profesori VALUES (11,'nume1');
+INSERT INTO profesori VALUES (12,'nume2');
+INSERT INTO profesori VALUES (13,'nume3');
+INSERT INTO profesori VALUES (14,'nume4');
+INSERT INTO profesori VALUES (15,'nume5');
+
+INSERT INTO note_elevi VALUES (100001,11,6);
+INSERT INTO note_elevi VALUES (100001,12,7);
+INSERT INTO note_elevi VALUES (100002,11,5);
+INSERT INTO note_elevi VALUES (100002,12,8);
+INSERT INTO note_elevi VALUES (100003,11,4);
+INSERT INTO note_elevi VALUES (100003,12,9);
+INSERT INTO note_elevi VALUES (100004,11,5);
+INSERT INTO note_elevi VALUES (100004,12,6);
+INSERT INTO note_elevi VALUES (100005,11,7);
+INSERT INTO note_elevi VALUES (100005,12,8);
+INSERT INTO note_elevi VALUES (100006,13,8);
+INSERT INTO note_elevi VALUES (100007,14,6);
+INSERT INTO note_elevi VALUES (100008,13,3);
+INSERT INTO note_elevi VALUES (100009,13,6);
+INSERT INTO note_elevi VALUES (100011,15,6);
+INSERT INTO note_elevi VALUES (100012,15,6);
+

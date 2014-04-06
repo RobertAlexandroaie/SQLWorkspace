@@ -1,0 +1,288 @@
+/*
+TEMA 1-BD
+Se considera urmatoarele tabele:
+CONTRACTE(CODC-cod contract,DATAC-data contractului,CODB-cod beneficiar,CODF-cod furnizor, DATAF-data finala a contractului),
+SOCIETATI(CODS-cod societate, DENS-denumire societate,CAPITAL-capitalul social,TIPSOC-tip societate),
+ARTICOLE(CODCA-cod contract,CODPA-cod produs, CANT-cantitate,PRET-pretul unitar)-contine articolele prevazute in contracte.
+PRODUSE(CODP-codul produsului,DENP- denumire produs,TIPP-tipul produsului)
+LIVRARI(CODCL-codul contractului,CODPL-codul produsului,CANTL-cantitatea livrata,DATAL-data livrarii) contine livrari la contracte.
+Obs. CODC este cheie primara pentru CONTRACTE, CODS pentru SOCIETATI, perechea (CODCA,CODPA) este cheie primara pentru ARTICOLE, CODP – pentru PRODUSE.
+Orice CODB si CODF trebuie sa fie coduri de societati.
+Se cere:
+1)Sa se creeze tabelele si sa se insereze date consistente in ele.
+
+*/
+
+DROP TABLE SOCIETATI CASCADE CONSTRAINTS;
+CREATE TABLE SOCIETATI 	
+(
+	CODS NUMBER(5) PRIMARY KEY, 
+	DENS CHAR(10) , 
+	CAPITAL NUMBER(10) , 
+	TIPSOC CHAR(30) 
+);
+
+DROP TABLE PRODUSE CASCADE CONSTRAINTS;
+CREATE TABLE PRODUSE
+(
+	CODP NUMBER(5) PRIMARY KEY ,
+	DENP CHAR(30) ,
+	TIPP CHAR(30) 
+);
+
+DROP TABLE CONTRACTE CASCADE CONSTRAINTS;
+CREATE TABLE CONTRACTE 
+(
+	CODC NUMBER(5) PRIMARY KEY, 
+	DATAC DATE , 
+	CODB NUMBER(5) REFERENCES SOCIETATI (CODS),
+	CODF NUMBER(5) REFERENCES SOCIETATI (CODS),
+	DATAF DATE 
+);
+	
+DROP TABLE ARTICOLE CASCADE CONSTRAINTS;
+CREATE TABLE ARTICOLE
+(
+	CODCA NUMBER(5) REFERENCES CONTRACTE (CODC) ,
+	CODPA NUMBER(5) REFERENCES PRODUSE (CODP) ,
+	CANT NUMBER(5) ,
+	PRET NUMBER(5) ,
+	PRIMARY KEY (CODCA, CODPA)
+);
+
+
+DROP TABLE LIVRARI CASCADE CONSTRAINTS;
+CREATE TABLE LIVRARI
+(
+	CODCL NUMBER(5) REFERENCES CONTRACTE (CODC),
+	CODPL NUMBER(5) REFERENCES PRODUSE (CODP),
+	CANTL NUMBER(5) ,
+	DATAL DATE
+);
+
+
+INSERT INTO SOCIETATI VALUES 
+	(5001,'DENUMIRE1', 50000, 'TIP1');
+INSERT INTO SOCIETATI VALUES 
+	(5002,'DENUMIRE2', 20000, 'TIP2');
+INSERT INTO SOCIETATI VALUES 
+	(5003,'DENUMIRE3', 40000, 'TIP2');
+INSERT INTO SOCIETATI VALUES 
+	(5004,'DENUMIRE4', 40000, 'TIP2');
+INSERT INTO SOCIETATI VALUES 
+	(5005,'DENUMIRE5', 65000, 'TIP1');
+INSERT INTO SOCIETATI VALUES 
+	(5006,'DENUMIRE6', 60000, 'TIP3');
+INSERT INTO SOCIETATI VALUES 
+	(5007,'DENUMIRE7', 20000, 'TIP1');
+INSERT INTO SOCIETATI VALUES 
+	(5008,'DENUMIRE8', 25000, 'TIP4');
+INSERT INTO SOCIETATI VALUES 
+	(5009,'DENUMIRE9', 75000, 'TIP5');
+INSERT INTO SOCIETATI VALUES 
+	(5010,'DENUMIRE10', 33000, 'TIP6');
+
+/*
+INSERT INTO CONTRACTE VALUES 
+	(1111,TO_DATE('17/12/1980', 'dd/mm/yyyy'),5532,5432,TO_DATE('17/12/2000', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(2222,TO_DATE('21/05/1990', 'dd/mm/yyyy'),5432,5668,TO_DATE('21/12/2020', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(3332,TO_DATE('21/10/1999', 'dd/mm/yyyy'),4352,4398,TO_DATE('10/2/2025', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(1234,TO_DATE('21/10/1999', 'dd/mm/yyyy'),6654,6656,TO_DATE('10/2/2025', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(4321,TO_DATE('01/10/2009', 'dd/mm/yyyy'),6656,6660,TO_DATE('10/11/2025', 'dd/mm/yyyy'));
+*/
+
+INSERT INTO CONTRACTE VALUES 
+	(3001,TO_DATE('22/03/2002', 'dd/mm/yyyy'),5001,5002,TO_DATE('05/05/2030', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(3002,TO_DATE('22/03/2002', 'dd/mm/yyyy'),5001,5003,TO_DATE('05/08/2030', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(3003,TO_DATE('22/04/2002', 'dd/mm/yyyy'),5003,5004,TO_DATE('05/09/2030', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(3004,TO_DATE('19/04/2005', 'dd/mm/yyyy'),5006,5007,TO_DATE('05/01/2030', 'dd/mm/yyyy'));
+INSERT INTO CONTRACTE VALUES 
+	(3005,TO_DATE('14/08/2001', 'dd/mm/yyyy'),5008,5009,TO_DATE('05/12/2030', 'dd/mm/yyyy'));
+
+
+INSERT INTO PRODUSE VALUES
+	(8001, 'Denumire1', 'Tip1');
+INSERT INTO PRODUSE VALUES
+	(8002, 'Denumire2', 'Tip1');
+INSERT INTO PRODUSE VALUES
+	(8003, 'Denumire3', 'Tip1');
+INSERT INTO PRODUSE VALUES
+	(8004, 'Denumire4', 'Tip1');
+INSERT INTO PRODUSE VALUES
+	(8005, 'Denumire5', 'Tip1');
+
+
+INSERT INTO ARTICOLE VALUES
+	(3001,8001,1000,500);
+INSERT INTO ARTICOLE VALUES
+	(3002,8002,2000,600);
+INSERT INTO ARTICOLE VALUES
+	(3003,8001,2500,300);
+INSERT INTO ARTICOLE VALUES
+	(3004,8003,1500,400);
+INSERT INTO ARTICOLE VALUES
+	(3005,8005,3000,900);
+INSERT INTO ARTICOLE VALUES
+	(3001,8003,1500,400);
+INSERT INTO ARTICOLE VALUES
+	(3002,8005,3000,900);
+
+INSERT INTO LIVRARI VALUES
+	(3001,8001,500,TO_DATE('05/05/2010', 'dd/mm/yyyy'));
+INSERT INTO LIVRARI VALUES
+	(3001,8001,500,TO_DATE('05/05/2011', 'dd/mm/yyyy'));	
+INSERT INTO LIVRARI VALUES
+	(3002,8002,1000,TO_DATE('05/08/2010', 'dd/mm/yyyy'));	
+INSERT INTO LIVRARI VALUES
+	(3002,8002,500, TO_DATE('05/08/2011', 'dd/mm/yyyy'));	
+INSERT INTO LIVRARI VALUES
+	(3003,8001,1500,TO_DATE('05/09/2010', 'dd/mm/yyyy'));	
+INSERT INTO LIVRARI VALUES
+	(3003,8001,1000,TO_DATE('05/09/2011', 'dd/mm/yyyy'));
+INSERT INTO LIVRARI VALUES
+	(3004,8003,1500,TO_DATE('05/01/2030', 'dd/mm/yyyy'));
+INSERT INTO LIVRARI VALUES
+	(3005,8005,3000,TO_DATE('05/12/2030', 'dd/mm/yyyy'));
+INSERT INTO LIVRARI VALUES
+	(3001,8003,1500,TO_DATE('05/05/2010', 'dd/mm/yyyy'));
+INSERT INTO LIVRARI VALUES
+	(3002,8005,3000,TO_DATE('05/08/2010', 'dd/mm/yyyy'));
+	
+COMMIT;
+
+/*2)Sa se realizeze scripturi pentru verificarea consistentei datelor.*/
+
+/*
+	SELECT CODB
+	FROM CONTRACTE
+	WHERE CODB NOT IN (SELECT CODS FROM SOCIETATI);
+	
+	SELECT CODF
+	FROM CONTRACTE
+	WHERE CODF NOT IN (SELECT CODS FROM SOCIETATI);
+	
+	SELECT CODCA
+	FROM ARTICOLE
+	WHERE CODCA NOT IN (SELECT CODC FROM CONTRACTE);
+	
+	SELECT CODCL
+	FROM LIVRARI
+	WHERE CODCL NOT IN (SELECT CODC FROM CONTRACTE);
+	
+	SELECT CODPA
+	FROM ARTICOLE
+	WHERE CODPA NOT IN (SELECT CODP FROM PRODUSE);
+
+	SELECT CODPL
+	FROM LIVRARI
+	WHERE CODPL NOT IN (SELECT CODP FROM PRODUSE);
+	
+	Toate ar trebui sa dea 0.
+*/
+
+/*
+3)Pentru fiecare inregistrare  din CONTRACTE  sa se afiseze denumirea societatii beneficiare cu capitalul social respectiv, precum si denumirea societatii furnizoare cu capitalul social respectiv.
+*/
+
+SELECT S1.DENS, S1.CAPITAL, S2.DENS, S2.CAPITAL
+FROM CONTRACTE C, SOCIETATI S1, SOCIETATI S2
+WHERE C.CODB=S1.CODS AND C.CODF=S2.CODS;
+
+/*
+4)Pentru fiecare contract sa se calculeze valoarea totala a sa.
+*/
+
+SELECT V.VALOARE AS "VALOARE TOTALA"
+FROM CONTRACTE C, (SELECT CODCA,SUM(CANT*PRET) AS "VALOARE"
+					FROM ARTICOLE
+					GROUP BY CODCA) V
+WHERE V.CODCA=C.CODC;
+
+
+/*5)Pentru fiecare contract CODC si produs CODP sa se calculeze cantitatea totala livrata din CODP la contractul CODC.*/
+
+SELECT C.CODC, SUM(L.CANTL)
+FROM CONTRACTE C, LIVRARI L
+WHERE C.CODC=L.CODCL
+GROUP BY C.CODC
+ORDER BY C.CODC;
+
+/*6)Pentru fiecare inregistrare din CONTRACTE  sa se afiseze inregistrarea din CONTRACTE apoi toate articolele din contractul respectiv, afisand pentru un produs si denumirea sa si TIPP.*/
+
+SELECT C.CODC, C.DATAC, C.CODB, C.CODF, C.DATAF, A.CODCA, A.CODPA, A.CANT, A.PRET, P.DENP, P.TIPP
+FROM CONTRACTE C, ARTICOLE A, PRODUSE P
+WHERE C.CODC=A.CODCA AND A.CODPA=P.CODP;
+
+/*
+7)Sa se afiseze contractele care au fost realizate integral.*/
+
+
+SELECT A.CODCA
+FROM
+	(
+		SELECT CODCA,SUM(CANT) AS "ASK" 
+		FROM ARTICOLE 
+		GROUP BY CODCA
+	) A, 
+    (
+		SELECT L.CODCL,SUM(CANTL) AS "LIV"
+		FROM LIVRARI L,CONTRACTE C 
+		WHERE L.CODCL=C.CODC AND L.DATAL<=C.DATAF 
+		GROUP BY L.CODCL
+	) LI
+WHERE LI.LIV=A.ASK AND A.CODCA=LI.CODCL
+
+
+/*
+8) Pentru fiecare contract nerealizat integral sa se calculeze penalitatile datorate de CODB lui CODF,stiind ca penalitatea pentru o zi intirziere si o unitate de produs este de 0,001 RON.
+*/
+
+/*
+SELECT FLOOR((C.DATAF-A.DATA)*0.001) AS "PENALIZARI"
+FROM
+	(
+		SELECT CODCA,SUM(CANT) AS "ASK"
+		FROM ARTICOLE 
+		GROUP BY CODCA
+	) A, 
+    (
+		SELECT L.CODCL,SUM(CANTL) AS "LIV", C.DATAF
+		FROM LIVRARI L,CONTRACTE C 
+		WHERE L.CODCL=C.CODC AND L.DATAL<=C.DATAF 
+		GROUP BY L.CODCL
+	) B
+WHERE A.ASK<>B.LIV AND A.CODCA=B.CODCL
+*/
+
+
+/*
+9)Pentru fiecare produs CODP sa se calculeze cantitatea totala din CODP prevazuta in toate contractele(se va afisa aici si denumirea produsului).
+*/
+
+SELECT P.DENP, SUM(A.CANT)
+FROM PRODUSE P, ARTICOLE A
+WHERE P.CODP=A.CODPA
+GROUP BY P.DENP;
+
+/*
+10)Pentru fiecare societate sa se calculeze valoarea totala a contractelor in care ea apare ca beneficiar (se va afisa si denumirea societatii). Daca o societate nu apare ca beneficiar in niciun contract sa se afiseze valoarea 0.
+*/
+
+SELECT S.DENS, REZ."VALOARE TOTALA"
+FROM SOCIETATI S,	(
+						SELECT C.CODB, V.VALOARE AS "VALOARE TOTALA"
+						FROM CONTRACTE C, 	(
+												SELECT CODCA,SUM(CANT*PRET) AS "VALOARE"
+												FROM ARTICOLE
+												GROUP BY CODCA
+											) V
+						WHERE V.CODCA=C.CODC
+					) REZ
+WHERE S.CODS=REZ.CODB;
